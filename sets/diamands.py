@@ -1,37 +1,36 @@
-data = input().split()
-N = int(data[0])
-a = int(data[1])
-b = int(data[2])
-K = int(data[3])
-can_be_real = [True] * N
-impossible = False
-for i in range(K):
-    data = input().split()
-    total_weight = int(data[0])
-    count = int(data[1])
-    stones_idx = [int(x) - 1 for x in data[2:2+count]] 
-    numerator = total_weight - count * a
-    denominator = b - a
-    if numerator % denominator != 0:
-        impossible = True
-        break
-    real_count = numerator // denominator
-    if real_count < 0 or real_count > count:
-        impossible = True
-        break
-    if real_count == 0:
-        for idx in stones_idx:
-            can_be_real[idx] = False
+N, a, b, K = map(int, input().split())
+weighings = []
+for _ in range(K):
+    data = list(map(int, input().split()))
+    wi = data[0]
+    stones = data[2:]
+    weighings.append((wi, stones))
 
-if impossible:
-    print("Impossible")
+status = [0] * N 
+
+for wi, stones in weighings:
+    m = len(stones)
+    s_all = a * m
+    s_one = (m - 1) * a + b
+    if wi != s_all and wi != s_one:
+        print("Impossible")
+        exit()
+    if wi == s_all:
+        for s in stones:
+            status[s - 1] = 1
+    elif wi == s_one:
+        for s in stones:
+            if status[s - 1] == 1:
+                continue
+            status[s - 1] = 2
+
+possible = []
+for i in range(N):
+    if status[i] != 1:
+        possible.append(i + 1)
+
+if not possible:
+    print("Fail")
 else:
-    real_candidates = []
-    for i in range(N):
-        if can_be_real[i]:
-            real_candidates.append(i + 1)  
-    if not real_candidates:
-        print("Fail")
-    else:
-        print(len(real_candidates))
-        print(" ".join(map(str, real_candidates)))
+    print(len(possible))
+    print(*possible)

@@ -1,1 +1,1 @@
-[[(n-1) + n for j in range(m)] for i in range(n)]
+[[(n - 1 - i) + j * n for j in range(m)] for i in range(n)]
