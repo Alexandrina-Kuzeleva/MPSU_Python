@@ -1,37 +1,25 @@
 n = int(input())
-states = {}
 electors = {}
-
+votes = {}
 for i in range(n):
-    state, votes = input().split()
-    electors[state] = int(votes)
-    states[state] = {}
-
-try:
-    while True:
-        data = input().split()
-        if not data:
-            break
-        state, candidate = data[0], data[1]
-        if state in states:
-            states[state][candidate] = states[state].get(candidate, 0) + 1
-except EOFError:
-    pass
-
-results = {}
-
-for state in states:
-    max_votes = -1
-    winner = None
-    
-    for candidate, votes in states[state].items():
-        if votes > max_votes or (votes == max_votes and candidate < winner):
-            max_votes = votes
-            winner = candidate
-    
-    results[winner] = results.get(winner, 0) + electors[state]
-
-sorted_results = sorted(results.items(), key=lambda x: (-x[1], x[0]))
-
-for candidate, votes in sorted_results:
-    print(candidate, votes)
+    s, e = input().split()
+    electors[s] = int(e)
+    votes[s] = {}
+while True:
+    try:
+        st, c = input().split()
+        votes[st][c] = votes[st].get(c, 0) + 1
+    except:
+        break
+res = {}
+for st in votes:
+    m = max(votes[st].values())
+    w = [k for k in votes[st] if votes[st][k] == m]
+    w = min(w)
+    res[w] = res.get(w, 0) + electors[st]
+for st in votes:
+    for c in votes[st]:
+        if c not in res:
+            res[c] = 0
+for c, v in sorted(res.items(), key=lambda x: (-x[1], x[0])):
+    print(c, v)
