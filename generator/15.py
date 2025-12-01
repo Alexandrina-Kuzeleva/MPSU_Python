@@ -1,0 +1,1 @@
+[[(i % 2) * (j % 2) for j in range(m)] for i in range(n)]

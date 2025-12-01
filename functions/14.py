@@ -1,12 +1,7 @@
-def add_brackets(s):
-    n = len(s)
-    if n <= 2:
-        if n == 1:
-            return s
-        else:
-            return f"({s})" if n == 2 else s
-    
-    return s[0] + '(' + add_brackets(s[1:-1]) + ')' + s[-1]
+def wrap(s):
+    if len(s) < 2:
+        return s
+    mid = len(s) // 2
+    return wrap(s[:mid]) + f"({s[mid:mid+(len(s)%2==0)+1]})" + wrap(s[mid+(len(s)%2==0)+1:])
 
-string = input().strip()
-print(add_brackets(string))
+print(wrap(input().strip()))

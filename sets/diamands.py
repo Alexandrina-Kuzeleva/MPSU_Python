@@ -1,36 +1,45 @@
-N, a, b, K = map(int, input().split())
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+idx = 0
+N = int(data[idx]); idx += 1
+a = int(data[idx]); idx += 1
+b = int(data[idx]); idx += 1
+K = int(data[idx]); idx += 1
+
+d = b - a
+
 weighings = []
+diffs = []
+
 for _ in range(K):
-    data = list(map(int, input().split()))
-    wi = data[0]
-    stones = data[2:]
-    weighings.append((wi, stones))
+    w = int(data[idx]); idx += 1
+    m = int(data[idx]); idx += 1
+    stones = {int(data[idx + i]) for i in range(m)}
+    idx += m
+    
+    diff = w - a * m
+    diffs.append(diff)
+    weighings.append(stones)
 
-status = [0] * N 
+candidates = []
+for i in range(1, N + 1):
+    possible = True
+    for j in range(K):
+        expected = d if i in weighings[j] else 0
+        if diffs[j] != expected:
+            possible = False
+            break
+    if possible:
+        candidates.append(i)
 
-for wi, stones in weighings:
-    m = len(stones)
-    s_all = a * m
-    s_one = (m - 1) * a + b
-    if wi != s_all and wi != s_one:
+if not candidates:
+    if any(diff != 0 for diff in diffs):
         print("Impossible")
-        exit()
-    if wi == s_all:
-        for s in stones:
-            status[s - 1] = 1
-    elif wi == s_one:
-        for s in stones:
-            if status[s - 1] == 1:
-                continue
-            status[s - 1] = 2
-
-possible = []
-for i in range(N):
-    if status[i] != 1:
-        possible.append(i + 1)
-
-if not possible:
-    print("Fail")
+    else:
+        print("Fail")
 else:
-    print(len(possible))
-    print(*possible)
+    print(len(candidates))
+    print(*sorted(candidates))

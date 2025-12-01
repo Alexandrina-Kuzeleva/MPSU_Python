@@ -1,14 +1,27 @@
-n, *nums = map(int, open(0).read().split())
+import sys
+import heapq
 
-arr = []
-res = []
+input = sys.stdin.read
+data = input().split()
 
-for x in nums:
-    i = 0
-    while i < len(arr) and arr[i] < x:
-        i += 1
-    arr.insert(i, x)
-    mid = (len(arr) + 1) // 2 - 1
-    res.append(arr[mid])
+n = int(data[0])
+nums = list(map(int, data[1:]))
 
-print(*res)
+left = []
+right = []
+result = []
+
+for num in nums:
+    if not left or num <= -left[0]:
+        heapq.heappush(left, -num)
+    else:
+        heapq.heappush(right, num)
+
+    if len(left) > len(right) + 1:
+        heapq.heappush(right, -heapq.heappop(left))
+    elif len(right) > len(left):
+        heapq.heappush(left, -heapq.heappop(right))
+
+    result.append(str(-left[0]))
+
+print(' '.join(result))
