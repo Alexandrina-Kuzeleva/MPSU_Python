@@ -1,17 +1,26 @@
-def gen_seq(n, k, start=None, seq=None):
-    if seq is None:
-        seq = []
-    if start is None:
-        start = n
-    
-    if len(seq) == k:
-        print(' '.join(map(str, seq)))
+def generate(n, k, current, result):
+    if len(current) == k:
+        result.append(current[:])
         return
     
-    for x in range(start, 0, -1):
-        seq.append(x)
-        gen_seq(n, k, x - 1, seq)
-        seq.pop()
+    if not current:
+        min_val = k
+        for x in range(min_val, n + 1):
+            current.append(x)
+            generate(n, k, current, result)
+            current.pop()
+    else:
+        prev = current[-1]
+        min_val = k - len(current)
+        max_val = prev - 1
+        for x in range(min_val, max_val + 1):
+            current.append(x)
+            generate(n, k, current, result)
+            current.pop()
 
 n, k = map(int, input().split())
-gen_seq(n, k)
+result = []
+generate(n, k, [], result)
+
+for seq in result:
+    print(' '.join(map(str, seq)))
