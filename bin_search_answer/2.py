@@ -1,23 +1,11 @@
-n = int(input())
-k = int(input())
-
-left = 0
-right = 2 * (10**9) + 1
-
-def can_solve(days, n, k):
-    if days <= k:
-        return days * (days + 1) // 2 >= n
+N = int(input())
+K = int(input())
+l, r = 1, 2 * 10**9
+while l < r:
+    mid = (l + r) // 2
+    total = mid * (2 * K + mid - 1) // 2
+    if total >= N:
+        r = mid
     else:
-        extra = days - k
-        total = k * (k + 1) // 2
-        total += (k - 1 + k - extra) * extra // 2
-        return total >= n
-
-while left < right:
-    mid = (left + right) // 2
-    if can_solve(mid, n, k):
-        right = mid
-    else:
-        left = mid + 1
-
-print(left)
+        l = mid + 1
+print(l)

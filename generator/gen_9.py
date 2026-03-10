@@ -1,1 +1,1 @@
-[[min(i, j, n-1-i, n-1-j) for j in range(n)] for i in range(n)]
+[[min(j, n - 1 - i) for j in range(n)] for i in range(n)]

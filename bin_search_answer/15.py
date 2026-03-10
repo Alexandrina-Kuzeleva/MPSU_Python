@@ -1,21 +1,31 @@
-def count_numbers_up_to(x, k):
-    count = 0
-    power = k
-    while power <= x:
-        count += x // power
-        power *= k * k
-    return count
-
 n, k = map(int, input().split())
 
-left = 0
-right = 10**18
+def find_nth(n, k):
+    res = 0
+    length = 1
+    cnt = k - 1
+    total = 0
+    while True:
+        odd_count = cnt ** length
+        if total + odd_count >= n:
+            break
+        total += odd_count
+        length += 1
+    n -= total
+    digits = []
+    for _ in range(length):
+        base = cnt ** (length - 1)
+        d = (n - 1) // base
+        digits.append(d)
+        n -= d * base
+        length -= 1
+    num = 0
+    for d in digits:
+        if d >= 1:
+            num = num * k + d
+        else:
+            num = num * k
+    num *= k
+    return num
 
-while left < right:
-    mid = (left + right) // 2
-    if count_numbers_up_to(mid, k) >= n:
-        right = mid
-    else:
-        left = mid + 1
-
-print(left)
+print(find_nth(n, k))
