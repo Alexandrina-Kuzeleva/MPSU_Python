@@ -1,17 +1,26 @@
-N = int(input())
+import sys
 
-color = [0] * (N + 1)
-max_color = 0
-
-for i in range(2, N + 1):
-    if color[i] == 0:
-        max_color += 1
-        for j in range(i, N + 1, i):
-            color[j] = max_color
-
-color[1] = 1
-if max_color == 0:
-    max_color = 1
-
-print(max_color)
-print(' '.join(map(str, color[1:])))
+input_data = sys.stdin.read().split()
+if input_data:
+    n = int(input_data[0])
+    
+    res = [0] * (n + 1)
+    primes = []
+    
+    for i in range(2, n + 1):
+        if res[i] == 0:
+            res[i] = 1
+            primes.append(i)
+        
+        for p in primes:
+            if p * i > n:
+                break
+            res[p * i] = res[i] + 1
+            
+            if i % p == 0:
+                break
+                
+    ans = [res[i] + 1 if i > 0 else 1 for i in range(1, n + 1)]
+    
+    sys.stdout.write(str(max(ans)) + "\n")
+    sys.stdout.write(" ".join(map(str, ans)) + "\n")
